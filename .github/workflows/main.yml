@@ -29,8 +29,8 @@ jobs:
     - name: Build and push Docker image
       run: |
         cd React
-        docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/react .
-        docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/react
+        docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/react-442214 .
+        docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/react-442214
 
     - name: Deploy to Cloud Run
       run: |
