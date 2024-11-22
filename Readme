@@ -1,0 +1,136 @@
+Here’s the README file in a plain text format, ready to be copied and pasted:
+
+---
+
+# Microservices Deployment and Usage Guide
+
+## Overview
+
+This project consists of three microservices: **React**, **Flask**, and **LSTM/Keras**. These services are designed to track GitHub issues and forecast data using TensorFlow/LSTM. Each microservice has a specific role in the overall application.
+
+---
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your computer:
+1. Docker: [Get Started with Docker](https://www.docker.com/get-started)
+2. Google Cloud SDK: [Install Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
+3. Node.js (for React): [Download Node.js](https://nodejs.org/en/download/)
+
+---
+
+## Microservices Details
+
+### 1. **React**: Frontend Microservice
+**Functionality**:
+- Retrieves GitHub issues and displays bar charts using Highcharts.
+- Displays forecasted data images from GCP storage.
+- Makes API calls to the Flask microservice.
+
+**To Run Locally**:
+1. Navigate to the React folder in your terminal.
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Update the Flask URL in `src/setupProxy.js` to `http://localhost:5000`.
+4. Start the application:
+   ```
+   npm start
+   ```
+
+**To Deploy on Google Cloud Platform (GCP)**:
+1. Build a Docker image:
+   ```
+   docker build .
+   ```
+2. Tag the image:
+   ```
+   docker tag <image_id> gcr.io/<project-id>/<project-name>
+   ```
+3. Push the image to GCP Container Registry:
+   ```
+   docker push gcr.io/<project-id>/<project-name>
+   ```
+4. Deploy the service on Cloud Run:
+   - Set the container port to `3000`.
+   - Allow unauthorized access.
+   - Increase memory to 1GiB.
+   - Create the service.
+
+---
+
+### 2. **Flask**: Backend Microservice
+**Functionality**:
+- Fetches GitHub issues for the past year and groups them by month.
+- Sends data to the LSTM microservice for forecasting.
+- Returns the forecasted results to the React frontend.
+
+**To Run Locally**:
+1. Create a virtual environment and activate it:
+   ```
+   python -m venv env
+   source env/bin/activate  # For Linux/macOS
+   env\Scripts\activate.bat  # For Windows
+   ```
+2. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+3. Update the LSTM URL in `app.py` to `http://localhost:8080`.
+4. Start the Flask server:
+   ```
+   python app.py
+   ```
+
+**To Deploy on GCP**:
+1. Build, tag, and push a Docker image as described in the React section.
+2. Deploy the service on Cloud Run:
+   - Set the container port to `5000`.
+   - Add the environment variable `GITHUB_TOKEN` with your GitHub personal access token.
+   - Create the service.
+
+---
+
+### 3. **LSTM/Keras**: Forecasting Microservice
+**Functionality**:
+- Accepts data from the Flask microservice and forecasts it using past 30 days of data.
+- Generates and stores forecast graphs in GCP storage.
+
+**To Run Locally**:
+1. Set up a virtual environment as described in the Flask section.
+2. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+3. Start the LSTM service:
+   ```
+   python app.py
+   ```
+
+**To Deploy on GCP**:
+1. Configure GCP storage:
+   - Create a bucket and note its name.
+   - Update permissions to allow public access.
+2. Add a service account and download its credentials as a JSON file.
+3. Set the environment variables:
+   - `GOOGLE_APPLICATION_CREDENTIALS`: Path to the service account JSON file.
+   - `BASE_IMAGE_PATH`: GCP bucket URL.
+   - `BUCKET_NAME`: Your bucket name.
+4. Deploy the service on Cloud Run:
+   - Set the container port to `8080`.
+   - Add the environment variables.
+   - Create the service.
+
+---
+
+## Notes
+
+1. All URLs (React, Flask, LSTM) should be updated appropriately in each microservice before deployment.
+2. For local runs, ensure that all services are running on their respective ports (`3000` for React, `5000` for Flask, and `8080` for LSTM).
+
+Enjoy using the application! If you face any issues, refer to the respective microservice sections for troubleshooting.
+
+--- 
+
+You can copy and paste this directly into your README file.
