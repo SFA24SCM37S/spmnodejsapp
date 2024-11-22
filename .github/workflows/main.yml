@@ -21,7 +21,7 @@ jobs:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
 
     - name: Authenticate Docker
-      run: gcloud auth configure-docke
+      run: gcloud auth configure-docker
       
     - name: Authenticate Docker with Google Artifact Registry
       run: gcloud auth configure-docker us-central1-docker.pkg.dev
